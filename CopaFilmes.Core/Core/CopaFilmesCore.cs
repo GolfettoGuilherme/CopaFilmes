@@ -22,7 +22,7 @@ namespace CopaFilmes.Core
             this._configuration = configuration;
         }
 
-        private async Task<List<Filme>> BuscarFilmesApiAsync()
+        public async Task<List<Filme>> BuscarFilmesApiAsync()
         {
             try
             {

@@ -13,5 +13,7 @@ namespace CopaFilmes.Core
         List<Filme> Chaveamento(List<Filme> filmes);
 
         Filme ExecutarDisputa(Filme filme1, Filme filme2);
+
+        Task<List<Filme>> BuscarFilmesApiAsync();
     }
 }

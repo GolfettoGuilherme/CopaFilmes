@@ -6,7 +6,7 @@ using CopaFilmes.Api.Models;
 using CopaFilmes.Core;
 using Microsoft.AspNetCore.Mvc;
 
-// For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+
 
 namespace CopaFilmes.Api.Controllers
 {
@@ -45,5 +45,21 @@ namespace CopaFilmes.Api.Controllers
             }
             
         }
+
+
+        [HttpGet("BuscarFilmes")]
+        public async Task<IActionResult> BuscarFilmes()
+        {
+            try
+            {
+                var filmes = await this._core.BuscarFilmesApiAsync();
+
+                return Ok(filmes);
+            } catch(Exception ex)
+            {
+                return BadRequest();
+            }
+        }
+
     }
 }
