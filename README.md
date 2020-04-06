@@ -16,7 +16,7 @@ Abra o diretório no VS Code, com o terminal execute os comandos:
 cd CopaFilmes.Api
 dotnet run
 `
-o App va rodar aumaticamente e estará ouvindo as URLs: `http://localhost:5001/` e `https://localhost:5001/`
+o App va rodar aumaticamente e estará ouvindo as URLs: `http://localhost:44318/` e `https://localhost:44317/`
 
 
 ## Mas dev, você testou isso?
@@ -29,8 +29,13 @@ Ta legal, então vamo testar
 
 #### No Visual Studio
 
-A Janela de `Unit Test` fica ao lado direto e la você pode realizar os testes no botão play
+A Opção de Testes integrada do Visual Studio vai encontrar os testes e pode rodar sem medo.
 
 #### No Visual Studio Code
 
-usando a Extensao `.NET Core Test Explorer`, vai ter o menu de testes e pode rodar sem medo.
+usando a Extensao `.NET Core Test Explorer`, vai ter o menu de testes e pode rodar sem medo também.
+
+
+
+:)
+
