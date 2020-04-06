@@ -55,7 +55,7 @@ namespace CopaFilmes.Api.Controllers
                 var filmes = await this._core.BuscarFilmesApiAsync();
 
                 return Ok(filmes);
-            } catch(Exception ex)
+            } catch(Exception)
             {
                 return BadRequest();
             }
