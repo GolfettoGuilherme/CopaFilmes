@@ -12,11 +12,10 @@ Sem segredo, só abrir a solution e mandar rodar.
 
 Abra o diretório no VS Code, com o terminal execute os comandos:
 
-`
-cd CopaFilmes.Api
-dotnet run
-`
-o App va rodar aumaticamente e estará ouvindo as URLs: `http://localhost:44318/` e `https://localhost:44317/`
+`cd CopaFilmes.Api`
+`dotnet run`
+
+o App va rodar automaticamente e estará ouvindo as URLs: `http://localhost:44318/` e `https://localhost:44317/`
 
 
 ## Mas dev, você testou isso?
