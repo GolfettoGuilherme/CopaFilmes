@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using CopaFilmes.Api.Models;
 using CopaFilmes.Core;
@@ -20,11 +18,6 @@ namespace CopaFilmes.Api.Controllers
             this._core = core;
         }
 
-        [HttpGet("Index")]
-        public IActionResult Index()
-        {
-            return Ok("Oi ;)");
-        }
 
         [HttpPost("ExecutarProcessamento")]
         public async Task<IActionResult> ExecutarProcessamentoAsync([FromBody]ProcessamentoDataRequest entrada)

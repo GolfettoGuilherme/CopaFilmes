@@ -1,6 +1,4 @@
-﻿using System;
-using CopaFilmes.Core.Modelos;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 
 namespace CopaFilmes.Core.Injection
 {
@@ -13,7 +11,6 @@ namespace CopaFilmes.Core.Injection
             services.AddScoped<ICopaFilmesCore, CopaFilmesCore>();
 
             return services;
-            //teste
         }
     }
 }
