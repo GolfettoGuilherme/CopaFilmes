@@ -1,23 +1,23 @@
 ﻿using System;
 using System.Threading.Tasks;
 using CopaFilmes.Api.Models;
-using CopaFilmes.Core;
+using CopaFilmes.Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-
-
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CopaFilmes.Api.Controllers
 {
     [Route("/api/{controller}")]
     public class HomeController : ControllerBase
     {
-        private readonly ICopaFilmesCore _core;
+        private ICopaFilmesCore _core;
+        private IBuscaFilmesCore _buscaFilmesCore;
+        private readonly IServiceProvider _provider;
 
-        public HomeController(ICopaFilmesCore core)
+        public HomeController(IServiceProvider provider)
         {
-            this._core = core;
+            _provider = provider;
         }
-
 
         [HttpPost("ExecutarProcessamento")]
         public async Task<IActionResult> ExecutarProcessamentoAsync([FromBody]ProcessamentoDataRequest entrada)
@@ -26,7 +26,9 @@ namespace CopaFilmes.Api.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var filmes = await this._core.ExecutarCampeonatoAsync(entrada.Ids);
+                    _core = _provider.GetService<ICopaFilmesCore>();
+
+                    var filmes = await _core.ExecutarCampeonatoAsync(entrada.Ids);
 
                     return Ok(filmes);
                 }
@@ -45,7 +47,9 @@ namespace CopaFilmes.Api.Controllers
         {
             try
             {
-                var filmes = await this._core.BuscarFilmesApiAsync();
+                _buscaFilmesCore = _provider.GetService<IBuscaFilmesCore>();
+
+                var filmes = await _buscaFilmesCore.Buscar();
 
                 return Ok(filmes);
             } catch(Exception)

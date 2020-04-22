@@ -1,9 +1,7 @@
-using System.Collections.Generic;
-using System.Net.Http;
-using CopaFilmes.Core;
+using CopaFilmes.Core.Injection;
+using CopaFilmes.Core.Interfaces;
 using CopaFilmes.Core.Modelos;
-using Microsoft.Extensions.Configuration;
-using Moq;
+using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 
 namespace CopaFilmes.Testes
@@ -11,23 +9,39 @@ namespace CopaFilmes.Testes
     [TestFixture]
     public class Tests
     {
-        private ICopaFilmesCore _core;
+        private IDisputaCore _disputaCore;
+        private IChaveamentoCore _chaveamentoCore;
+        private IBuscaFilmesCore _buscaFilmesCore;
+
+        private ServiceProvider ServiceProvider { get; set; }
 
         [SetUp]
         public void SetUp()
         {
-            var factory = new Mock<IHttpClientFactory>();
-            Mock<IConfiguration> configuration = new Mock<IConfiguration>();
-            configuration.Setup(c => c.GetSection(It.IsAny<string>())).Returns(new Mock<IConfigurationSection>().Object);
+            var services = new ServiceCollection();
 
-            var core = new CopaFilmesCore(factory.Object, configuration.Object);
+            services.DI();
 
-            this._core = core;
+            ServiceProvider = services.BuildServiceProvider();
+
+        }
+
+        [Test]
+        public async System.Threading.Tasks.Task Teste_BuscaApiAsync()
+        {
+            _buscaFilmesCore = ServiceProvider.GetService<IBuscaFilmesCore>();
+
+            var filmes = await _buscaFilmesCore.Buscar();
+
+            Assert.IsNotNull(filmes);
         }
 
         [Test]
         public void Teste_RealizaDisputa_NotaMaiorVence()
         {
+
+            _disputaCore = ServiceProvider.GetService<IDisputaCore>();
+
             var vencedor = new Filme()
             {
                 Id = "tt3778644",
@@ -43,7 +57,7 @@ namespace CopaFilmes.Testes
                 Nota = 6.5m
             };
 
-            var retorno = _core.ExecutarDisputa(vencedor, perdedor);
+            var retorno = _disputaCore.ExecutarDisputa(vencedor, perdedor);
 
             Assert.Greater(retorno.Nota, perdedor.Nota);
         }
@@ -51,6 +65,9 @@ namespace CopaFilmes.Testes
         [Test]
         public void Teste_RealizaDisputa_Desempate()
         {
+
+            _disputaCore = ServiceProvider.GetService<IDisputaCore>();
+
             var vencedor = new Filme()
             {
                 Id = "tt7784604",
@@ -66,82 +83,25 @@ namespace CopaFilmes.Testes
                 Nota = 7.8m
             };
 
-            var retorno = _core.ExecutarDisputa(vencedor, perdedor);
+            var retorno = _disputaCore.ExecutarDisputa(vencedor, perdedor);
 
             Assert.AreEqual(retorno, vencedor);
         }
 
         [Test]
-        public void Teste_RealizaChavemento()
+        public async void Teste_RealizaChavemento()
         {
-            var filmes = MontarListaMockada();
 
-            var finalistas = _core.Chaveamento(filmes);
+            _chaveamentoCore = ServiceProvider.GetService<IChaveamentoCore>();
+            _buscaFilmesCore = ServiceProvider.GetService<IBuscaFilmesCore>();
+
+            var filmes = await _buscaFilmesCore.Buscar();
+
+            var finalistas = _chaveamentoCore.Chaveamento(filmes);
 
             Assert.Less(finalistas.Count, filmes.Count);
         }
 
-        private List<Filme> MontarListaMockada()
-        {
-            var retorno = new List<Filme>();
-            retorno.Add(new Filme()
-            {
-                Id = "tt3606756",
-                Titulo = "Os Incríveis 2",
-                Ano = 2018,
-                Nota = 8.5m
-            });
-            retorno.Add(new Filme()
-            {
-                Id = "tt4881806",
-                Titulo = "Jurassic World: Reino Ameaçado",
-                Ano = 2018,
-                Nota = 6.7m
-            });
-            retorno.Add(new Filme()
-            {
-                Id = "tt5164214",
-                Titulo = "Oito Mulheres e um Segredo",
-                Ano = 2018,
-                Nota = 6.3m
-            });
-            retorno.Add(new Filme()
-            {
-                Id = "tt7784604",
-                Titulo = "Hereditário",
-                Ano = 2018,
-                Nota = 7.8m
-            });
-            retorno.Add(new Filme()
-            {
-                Id = "tt4154756",
-                Titulo = "Vingadores: Guerra Infinita",
-                Ano = 2018,
-                Nota = 8.8m
-            });
-            retorno.Add(new Filme()
-            {
-                Id = "tt5463162",
-                Titulo = "Deadpool 2",
-                Ano = 2018,
-                Nota = 8.1m
-            });
-            retorno.Add(new Filme()
-            {
-                Id = "tt3778644",
-                Titulo = "Han Solo: Uma História Star Wars",
-                Ano = 2018,
-                Nota = 7.2m
-            });
-            retorno.Add(new Filme()
-            {
-                Id = "tt3501632",
-                Titulo = "Thor: Ragnarok",
-                Ano = 2017,
-                Nota = 7.9m
-            });
-
-            return retorno;
-        }
+        
     }
 }
